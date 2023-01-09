@@ -6,6 +6,7 @@ import com.banking.domain.model.transaction.Transaction;
 import com.banking.domain.model.transaction.Withdrawal;
 import com.banking.domain.port.secondary.AccountRepository;
 import com.banking.domain.port.usecase.PrintStatementUseCase;
+import com.banking.exceptions.AccountNotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ public class PrintStatementUseCaseTest {
 
 
     @Test
-    public void should_print_statement() {
+    public void should_print_statement() throws AccountNotFoundException {
         Long accountId = 1L;
         Transactions transactions = new Transactions();
         Transaction deposit = new Deposit(Money.of(BigDecimal.valueOf(10)), DEPOSIT_DATE, Money.of(BigDecimal.valueOf(20)));
@@ -32,8 +33,8 @@ public class PrintStatementUseCaseTest {
         transactions.add(withDrawal);
 
         Account account = new Account(accountId, Money.of(BigDecimal.TEN), transactions);
-        AccountRepository accountRepositoryStub = id -> account;
-        PrintStatementUseCase printStatementUseCase = new PrintStatementUseCase(accountRepositoryStub);
+        InMemoryAccountRepository inMemoryAccountRepository = new InMemoryAccountRepository(account);
+        PrintStatementUseCase printStatementUseCase = new PrintStatementUseCase(inMemoryAccountRepository);
         String printedStatements = printStatementUseCase.print(accountId);
         Assert.assertEquals(EXPECTED_PRINTED_STATEMENTS, printedStatements);
     }

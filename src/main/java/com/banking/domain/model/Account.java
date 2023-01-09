@@ -21,6 +21,10 @@ public class Account {
         this.transactions = transactions;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public Money getBalance() {
         return balance;
     }

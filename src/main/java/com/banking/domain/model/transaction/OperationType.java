@@ -1,4 +1,4 @@
-package com.banking.enumeration;
+package com.banking.domain.model.transaction;
 
 public enum OperationType {
 
